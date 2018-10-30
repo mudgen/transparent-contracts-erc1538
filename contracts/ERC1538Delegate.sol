@@ -27,6 +27,7 @@ contract ERC1538Delegate is ERC1538 {
         //Adding ERC1538 updateContract function
         bytes memory signature = "updateContract(address,string,string)";
         bytes4 funcId = bytes4(keccak256(signature));
+        delegates[funcId] = _erc1538Delegate;
         funcSignatures.push(signature);
         funcSignatureToIndex[signature] = funcSignatures.length;
         emit FunctionUpdate(funcId, address(0), _erc1538Delegate, string(signature));
@@ -35,7 +36,6 @@ contract ERC1538Delegate is ERC1538 {
 
     function updateContract(address _delegate, string _functionSignatures, string commitMessage) external {
         require(msg.sender == contractOwner, "Must own the contract.");
-        require(_delegate != address(0), "delegate can't be zero address.");
         bytes memory signatures = bytes(_functionSignatures);
         uint256 signaturesEnd;
         uint256 pos;
