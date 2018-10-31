@@ -9,30 +9,14 @@ interface ERC1538 {
 
 
 contract ERC1538Delegate is ERC1538 {
-    // funcId => delegate contract
-    mapping(bytes4 => address) internal delegates;
 
     address internal contractOwner;
+
+    // funcId => delegate contract
+    mapping(bytes4 => address) internal delegates;
     bytes[] internal funcSignatures;
     // signature => index+1
     mapping(bytes => uint256) internal funcSignatureToIndex;
-
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-    function addERC1538Delegate(address _erc1538Delegate) external {
-        require(contractOwner == address(0), "Contract owner has been set.");
-        contractOwner = msg.sender;
-        emit OwnershipTransferred(address(0), msg.sender);
-
-        //Adding ERC1538 updateContract function
-        bytes memory signature = "updateContract(address,string,string)";
-        bytes4 funcId = bytes4(keccak256(signature));
-        delegates[funcId] = _erc1538Delegate;
-        funcSignatures.push(signature);
-        funcSignatureToIndex[signature] = funcSignatures.length;
-        emit FunctionUpdate(funcId, address(0), _erc1538Delegate, string(signature));
-        emit CommitMessage("Added ERC1538 updateContract function");
-    }
 
     function updateContract(address _delegate, string _functionSignatures, string commitMessage) external {
         require(msg.sender == contractOwner, "Must own the contract.");
