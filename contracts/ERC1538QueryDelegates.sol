@@ -2,17 +2,29 @@ pragma solidity 0.4.24;
 pragma experimental "v0.5.0";
 /******************************************************************************\
 * Author: Nick Mudge
-* Copyright (c) 2018
-* Mokens
 *
-* The QueryMokenDelegates contract contains functions for retrieving function
-* signatures and delegate contract addresses used by the Mokens contract.
+* Contains functions for retrieving function signatures and delegate contract
+* addresses.
 /******************************************************************************/
 
 //Function signatures
 //"functionByIndex(uint256)functionExists(string)delegateAddress(string)delegateAddresses()delegateFunctionSignatures(address)functionById(bytes4)functionBySignature(string)functionSignatures()totalFunctions()"
 
-contract ERC1538QueryDelegates {
+
+interface ERC1538Query {
+    function totalFunctions() external view returns(uint256);
+    function functionByIndex(uint256 _index) external view returns(string memory functionSignature, bytes4 functionId, address delegate);
+    function functionExists(string _functionSignature) external view returns(bool);
+    function functionSignatures() external view returns(string);
+    function delegateFunctionSignatures(address _delegate) external view returns(string);
+    function delegateAddress(string _functionSignature) external view returns(address);
+    function functionBySignature(string _functionSignature) external view returns(bytes4 functionId, address delegate);
+    function functionById(bytes4 _functionId) external view returns(string signature, address delegate);
+    function delegateAddresses() external view returns(address[]);
+
+}
+
+contract ERC1538QueryDelegates is ERC1538Query {
 
     // funcId => delegate contract
     mapping(bytes4 => address) internal delegates;

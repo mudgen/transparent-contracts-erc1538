@@ -18,6 +18,9 @@ contract('testing', async (accounts) => {
 
     functionSignatures = "functionByIndex(uint256)functionExists(string)delegateAddress(string)delegateAddresses()delegateFunctionSignatures(address)functionById(bytes4)functionBySignature(string)functionSignatures()totalFunctions()";
     tx = await transparentContract.updateContract(erc1538QueryDelegates.address, functionSignatures, "Adding delegate query functions.");
+
+    functionSignatures = "approve(address,uint256)balanceOf(address)getApproved(uint256)isApprovedForAll(address,address)ownerOf(uint256)safeTransferFrom(address,address,uint256)safeTransferFrom(address,address,uint256,bytes)setApprovalForAll(address,bool)transferFrom(address,address,uint256)"
+    tx = await transparentContract.updateContract(erc721Delegate.address, functionSignatures, "Adding ERC721 functions");
     //console.log(tx);
     //console.log(transparentContract);
   });

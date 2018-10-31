@@ -1,12 +1,18 @@
 pragma solidity 0.4.24;
 pragma experimental "v0.5.0";
 
+/******************************************************************************\
+* Author: Nick Mudge
+*
+* Implementation of ERC1538.
+* Function signatures are stored in an array so functions can be queried.
+/******************************************************************************/
+
 interface ERC1538 {
     event CommitMessage(string message);
     event FunctionUpdate(bytes4 indexed functionId, address indexed oldDelegate, address indexed newDelegate, string functionSignature);
     function updateContract(address _delegate, string _functionSignatures, string commitMessage) external;
 }
-
 
 contract ERC1538Delegate is ERC1538 {
 
@@ -35,6 +41,7 @@ contract ERC1538Delegate is ERC1538 {
         uint256 char;
         uint256 index;
         uint256 lastIndex;
+        // parse the _functionSignatures string and handle each function
         for (; pos < signaturesEnd; pos++) {
             assembly {char := byte(0,mload(pos))}
             // 0x29 == )

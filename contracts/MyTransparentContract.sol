@@ -1,6 +1,13 @@
 pragma solidity 0.4.24;
 pragma experimental "v0.5.0";
 
+/******************************************************************************\
+* Author: Nick Mudge
+*
+* Implementation of a transparent contract.
+* Function signatures are stored in an array so functions can be queried
+/******************************************************************************/
+
 contract MyTransparentContract {
     //owner of the contract
     address internal contractOwner;
@@ -16,6 +23,7 @@ contract MyTransparentContract {
     // maps each function signature to its position in the funcSignatures array.
     // signature => index+1
     mapping(bytes => uint256) internal funcSignatureToIndex;
+
     event CommitMessage(string message);
     event FunctionUpdate(bytes4 indexed functionId, address indexed oldDelegate, address indexed newDelegate, string functionSignature);
 
