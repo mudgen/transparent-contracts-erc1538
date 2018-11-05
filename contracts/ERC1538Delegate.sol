@@ -26,20 +26,38 @@ contract ERC1538Delegate is ERC1538 {
 
     function updateContract(address _delegate, string _functionSignatures, string commitMessage) external {
         require(msg.sender == contractOwner, "Must own the contract.");
-        bytes memory signatures = bytes(_functionSignatures);
-        uint256 signaturesEnd;
+        // pos is first used to check the size of the delegate contract.
+        // After that pos is the current memory location of _functionSignatures.
+        // It is used to move through the characters of _functionSignatures
         uint256 pos;
+        if(_delegate != address(0)) {
+            assembly {
+                pos := extcodesize(_delegate)
+            }
+            require(pos > 0, "_delegate address is not a contract and is not address(0)");
+        }
+        // creates a bytes vesion of _functionSignatures
+        bytes memory signatures = bytes(_functionSignatures);
+        // stores the position in memory where _functionSignatures ends.
+        uint256 signaturesEnd;
+        // stores the starting position of a function signature in _functionSignatures
         uint256 start;
         assembly {
             pos := add(signatures,32)
             start := pos
             signaturesEnd := add(pos,mload(signatures))
         }
+        // the function id of the current function signature
         bytes4 funcId;
+        // the delegate address that is being replaced or address(0) if removing functions
         address oldDelegate;
+        // the length of the current function signature in _functionSignatures
         uint256 num;
+        // the current character in _functionSignatures
         uint256 char;
+        // the position of the current function signature in the funcSignatures array
         uint256 index;
+        // the last position in the funcSignatures array
         uint256 lastIndex;
         // parse the _functionSignatures string and handle each function
         for (; pos < signaturesEnd; pos++) {
