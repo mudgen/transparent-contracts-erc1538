@@ -10,6 +10,7 @@ pragma experimental "v0.5.0";
 //Function signatures
 //"functionByIndex(uint256)functionExists(string)delegateAddress(string)delegateAddresses()delegateFunctionSignatures(address)functionById(bytes4)functionBySignature(string)functionSignatures()totalFunctions()"
 
+import "./UpgradeStorage.sol";
 
 interface ERC1538Query {
     function totalFunctions() external view returns(uint256);
@@ -24,16 +25,7 @@ interface ERC1538Query {
 
 }
 
-contract ERC1538QueryDelegates is ERC1538Query {
-
-    address internal contractOwner;
-
-    // funcId => delegate contract
-    mapping(bytes4 => address) internal delegates;
-
-    bytes[] internal funcSignatures;
-    // signature => index+1
-    mapping(bytes => uint256) internal funcSignatureToIndex;
+contract ERC1538QueryDelegates is ERC1538Query, UpgradeStorage {
 
     function totalFunctions() external view returns(uint256) {
         return funcSignatures.length;

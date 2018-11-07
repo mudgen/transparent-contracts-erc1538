@@ -8,21 +8,15 @@ pragma experimental "v0.5.0";
 * Function signatures are stored in an array so functions can be queried.
 /******************************************************************************/
 
+import "./UpgradeStorage.sol";
+
 interface ERC1538 {
     event CommitMessage(string message);
     event FunctionUpdate(bytes4 indexed functionId, address indexed oldDelegate, address indexed newDelegate, string functionSignature);
     function updateContract(address _delegate, string _functionSignatures, string commitMessage) external;
 }
 
-contract ERC1538Delegate is ERC1538 {
-
-    address internal contractOwner;
-
-    // funcId => delegate contract
-    mapping(bytes4 => address) internal delegates;
-    bytes[] internal funcSignatures;
-    // signature => index+1
-    mapping(bytes => uint256) internal funcSignatureToIndex;
+contract ERC1538Delegate is ERC1538, UpgradeStorage {
 
     function updateContract(address _delegate, string _functionSignatures, string commitMessage) external {
         require(msg.sender == contractOwner, "Must own the contract.");

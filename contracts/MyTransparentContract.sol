@@ -8,21 +8,10 @@ pragma experimental "v0.5.0";
 * Function signatures are stored in an array so functions can be queried
 /******************************************************************************/
 
-contract MyTransparentContract {
-    //owner of the contract
-    address internal contractOwner;
+import "./UpgradeStorage.sol";
+
+contract MyTransparentContract is UpgradeStorage {
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-    // maps functions to the delegate contracts that execute the functions
-    // funcId => delegate contract
-    mapping(bytes4 => address) internal delegates;
-
-    // array of function signatures supported by the contract
-    bytes[] internal funcSignatures;
-
-    // maps each function signature to its position in the funcSignatures array.
-    // signature => index+1
-    mapping(bytes => uint256) internal funcSignatureToIndex;
 
     event CommitMessage(string message);
     event FunctionUpdate(bytes4 indexed functionId, address indexed oldDelegate, address indexed newDelegate, string functionSignature);
