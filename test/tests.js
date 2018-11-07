@@ -24,7 +24,7 @@ contract('testing', async (accounts) => {
   });
 
   it("gets delegate query answers", async () => {
-    result = await transparentContract.functionByIndex.call(4);
+    result = await transparentContract.functionByIndex.call(0);
     console.log("functionByIndex:"+result);
     console.log("");
 
@@ -60,13 +60,17 @@ contract('testing', async (accounts) => {
   });
 
   it("two functions get removed", async () => {
-    functionSignatures = "functionByIndex(uint256)functionById(bytes4)";
-    tx = await transparentContract.updateContract("0x0000000000000000000000000000000000000000", functionSignatures, "Removing two functions.");
+    //functionSignatures = "functionByIndex(uint256)functionById(bytes4)";
+    //tx = await transparentContract.updateContract("0x0000000000000000000000000000000000000000", functionSignatures, "Removing two functions.");
 
-    result = await transparentContract.totalFunctions.call();
-    console.log("totalFunctions:"+result);
+    result = await transparentContract.delegateFunctionSignatures.call(erc1538QueryDelegates.address);
+    console.log("delegateFunctionSignatures:"+result);
+    console.log("");
 
-    assert.equal(result, 8, "Not all functions were removed.")
+    //result = await transparentContract.totalFunctions.call();
+    //console.log("totalFunctions:"+result);
+
+    //assert.equal(result, 8, "Not all functions were removed.")
 
   });
 

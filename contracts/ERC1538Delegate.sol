@@ -103,5 +103,4 @@ contract ERC1538Delegate is ERC1538 {
         }
         emit CommitMessage(commitMessage);
     }
-
 }

@@ -26,10 +26,11 @@ interface ERC1538Query {
 
 contract ERC1538QueryDelegates is ERC1538Query {
 
+    address internal contractOwner;
+
     // funcId => delegate contract
     mapping(bytes4 => address) internal delegates;
 
-    address internal contractOwner;
     bytes[] internal funcSignatures;
     // signature => index+1
     mapping(bytes => uint256) internal funcSignatureToIndex;
