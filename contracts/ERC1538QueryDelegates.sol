@@ -19,7 +19,6 @@ interface ERC1538Query {
     function functionSignatures() external view returns(string);
     function delegateFunctionSignatures(address _delegate) external view returns(string);
     function delegateAddress(string _functionSignature) external view returns(address);
-    function functionBySignature(string _functionSignature) external view returns(bytes4 functionId, address delegate);
     function functionById(bytes4 _functionId) external view returns(string signature, address delegate);
     function delegateAddresses() external view returns(address[]);
 
@@ -104,12 +103,6 @@ contract ERC1538QueryDelegates is ERC1538Query, UpgradeStorage {
     function delegateAddress(string _functionSignature) external view returns(address) {
         require(funcSignatureToIndex[bytes(_functionSignature)] != 0, "Function signature not found.");
         return delegates[bytes4(keccak256(bytes(_functionSignature)))];
-    }
-
-    function functionBySignature(string _functionSignature) external view returns(bytes4 functionId, address delegate) {
-        require(funcSignatureToIndex[bytes(_functionSignature)] != 0, "Function signature not found.");
-        functionId = bytes4(keccak256(bytes(_functionSignature)));
-        return (functionId,delegates[functionId]);
     }
 
     function functionById(bytes4 _functionId) external view returns(string signature, address delegate) {
